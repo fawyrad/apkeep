@@ -39,8 +39,11 @@
 //! apkeep -a com.instagram.android .
 //! ```
 //!
-//! This downloads from the default source, APKPure, which does not require credentials.  To
-//! download directly from the google play store, you will first have to [obtain an AAS token](USAGE-google-play.md).
+//! This downloads from the default source, APKPure, which does not require credentials. For more
+//! APKPure usage examples, such as specifying a package architecture, refer to the
+//! [`USAGE-apkpure.md`](USAGE-apkpure.md) document.
+//!
+//! To download directly from the google play store, you will first have to [obtain an AAS token](USAGE-google-play.md).
 //! Then,
 //!
 //! ```shell
@@ -134,12 +137,13 @@ use cli::DownloadSource;
 
 mod config;
 mod consts;
-mod progress_bar;
+mod util;
 
-mod apkpure;
-mod fdroid;
-mod google_play;
-mod huawei_app_gallery;
+mod download_sources;
+use download_sources::google_play;
+use download_sources::fdroid;
+use download_sources::apkpure;
+use download_sources::huawei_app_gallery;
 
 type CSVList = Vec<(String, Option<String>)>;
 fn fetch_csv_list(csv: &str, field: usize, version_field: Option<usize>) -> Result<CSVList, Box<dyn Error>> {
@@ -264,7 +268,7 @@ async fn main() {
     if let Some(true) = matches.get_one::<bool>("list_versions") {
         match download_source {
             DownloadSource::APKPure => {
-                apkpure::list_versions(list).await;
+                apkpure::list_versions(list, options).await;
             }
             DownloadSource::GooglePlay => {
                 google_play::list_versions(list);
@@ -299,7 +303,13 @@ async fn main() {
 
         match download_source {
             DownloadSource::APKPure => {
-                apkpure::download_apps(list, parallel, sleep_duration, &outpath.unwrap()).await;
+                apkpure::download_apps(
+                    list,
+                    parallel,
+                    sleep_duration,
+                    &outpath.unwrap(),
+                    options,
+                ).await;
             }
             DownloadSource::GooglePlay => {
                 let mut email = matches.get_one::<String>("google_email").map(|v| v.to_string());

@@ -20,7 +20,7 @@ An AAS token should be printed. You can use this to download an app:
 apkeep -a com.instagram.android -d google-play -e 'someone@gmail.com' -t some_aas_token .
 ```
 
-This will use a default device configuration of `px_7a`, a timezone of `UTC`, and a locale of `en_US`.  To specify a different device profile, use the `-o` option:
+This will use a default device configuration of `px_9a`, a timezone of `UTC`, and a locale of `en_US`.  To specify a different device profile, use the `-o` option:
 
 ```shell
 apkeep -a com.instagram.android -d google-play -o device=ad_g3_pro -e 'someone@gmail.com' -t some_aas_token .
@@ -34,6 +34,12 @@ Likewise, a separate timezone or locale can also be specified:
 apkeep -a com.instagram.android -d google-play -o device=ad_g3_pro,locale=es_MX -e 'someone@gmail.com' -t some_aas_token .
 ```
 
+Note that if the app you're downloading is region-locked and not available in your region, the locale and timezone changes alone will not let apkeep download it. 
+In that case the download will fail with a `Invalid app response` error. 
+To download a region-locked app you first need to bind it to your account by downloading it with an IP address from a region it's available in.
+After the first download, you can download the app from any region.
+
+
 This option attempts to download a split APK if available, and falls back to the full APK:
 
 ```shell
@@ -44,7 +50,9 @@ A full list of options:
 
 * `device`: specify a device profile as described above
 * `locale`: specify a locale
+* `timezone`: specify a timezone 
 * `split_apk`: when set to `1` or `true`, attempts to download a [split APK](https://developer.android.com/studio/build/configure-apk-splits)
+* `include_dex_metadata`: when set to `1` or `true`, attempts to download the DexMetadata (dm) file for an app, which contains the apps' cloud profile
 * `include_additional_files`: when set to `1` or `true`, attempts to download any [additional `obb` expansion files](https://developer.android.com/google/play/expansion-files) for the app
 
 If you prefer not to provide your credentials on the command line, you can specify them in a config file named `apkeep.ini`.  This config file may have to be created, and must be located in the user config directory under the subpath `apkeep`.  Usually on Linux systems this will be `~/.config/apkeep/apkeep.ini`.  In this file specify your email and/or AAS token:

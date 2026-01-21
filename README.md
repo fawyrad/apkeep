@@ -4,7 +4,7 @@
 [![crates.io](https://img.shields.io/crates/v/apkeep.svg)](https://crates.io/crates/apkeep)
 [![MIT licensed](https://img.shields.io/crates/l/apkeep.svg)](./LICENSE)
 
-![apkeep logo](logo.png)
+![apkeep logo](logo.jpg)
 
 ## Installation
 
@@ -47,8 +47,11 @@ The simplest example is to download a single APK to the current directory:
 apkeep -a com.instagram.android .
 ```
 
-This downloads from the default source, APKPure, which does not require credentials.  To
-download directly from the google play store, you will first have to [obtain an AAS token](USAGE-google-play.md).
+This downloads from the default source, APKPure, which does not require credentials. For more
+APKPure usage examples, such as specifying a package architecture, refer to the
+[`USAGE-apkpure.md`](USAGE-apkpure.md) document.
+
+To download directly from the google play store, you will first have to [obtain an AAS token](USAGE-google-play.md).
 Then,
 
 ```shell
